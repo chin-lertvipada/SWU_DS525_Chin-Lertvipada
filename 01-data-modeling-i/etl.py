@@ -7,11 +7,9 @@ from typing import List
 import psycopg2
 
 
-table_insert = """
-    INSERT INTO users (
-        xxx
-    ) VALUES (%s)
-    ON CONFLICT (xxx) DO NOTHING
+table_insert_repo = """
+    INSERT INTO Repo VALUES %s
+    ON CONFLICT DO NOTHING
 """
 
 
@@ -41,10 +39,15 @@ def process(cur, conn, filepath):
             data = json.loads(f.read())
             for each in data:
                 # Print some sample data
-                print(each["id"], each["type"], each["actor"]["login"])
+                # print(each["id"], each["type"], each["actor"]["login"])
+                val = (each["repo"]["id"]), (each["repo"]["name"]), (each["repo"]["url"])
+                sql_insert = table_insert_repo % str(val)
+                # print(sql_insert)
 
                 # Insert data into tables here
+                cur.execute(sql_insert)
 
+                conn.commit()
 
 def main():
     conn = psycopg2.connect(
@@ -52,7 +55,7 @@ def main():
     )
     cur = conn.cursor()
 
-    process(cur, conn, filepath="../data")
+    process(cur, conn, filepath="../data/")
 
     conn.close()
 
