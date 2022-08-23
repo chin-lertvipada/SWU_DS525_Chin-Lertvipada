@@ -7,10 +7,10 @@ from typing import List
 import psycopg2
 
 
-table_insert_repo = """
-    INSERT INTO Repo VALUES %s
-    ON CONFLICT DO NOTHING
-"""
+table_insert_repo  = "INSERT INTO Repo VALUES %s ON CONFLICT DO NOTHING;"
+table_insert_org   = "INSERT INTO Org VALUES %s ON CONFLICT DO NOTHING;"
+table_insert_actor = "INSERT INTO Actor VALUES %s ON CONFLICT DO NOTHING;"
+table_insert_event = "INSERT INTO Event VALUES %s ON CONFLICT DO NOTHING;"
 
 
 def get_files(filepath: str) -> List[str]:
@@ -20,7 +20,8 @@ def get_files(filepath: str) -> List[str]:
 
     all_files = []
     for root, dirs, files in os.walk(filepath):
-        files = glob.glob(os.path.join(root, "*.json"))
+        # files = glob.glob(os.path.join(root, "*.json"))
+        files = glob.glob(os.path.join(root, "github_events.json"))
         for f in files:
             all_files.append(os.path.abspath(f))
 
@@ -38,16 +39,34 @@ def process(cur, conn, filepath):
         with open(datafile, "r") as f:
             data = json.loads(f.read())
             for each in data:
-                # Print some sample data
-                # print(each["id"], each["type"], each["actor"]["login"])
-                val = (each["repo"]["id"]), (each["repo"]["name"]), (each["repo"]["url"])
+
+                # Insert for Repo
+                val = each["repo"]["id"], each["repo"]["name"], each["repo"]["url"]
                 sql_insert = table_insert_repo % str(val)
-                # print(sql_insert)
-
-                # Insert data into tables here
                 cur.execute(sql_insert)
-
                 conn.commit()
+
+                # Insert for Org
+                try:
+                    val = each["org"]["id"], each["org"]["login"], each["org"]["gravatar_id"], each["org"]["url"], each["org"]["avatar_url"]
+                    sql_insert = table_insert_org % str(val)
+                    cur.execute(sql_insert)
+                    conn.commit()
+                except: pass
+
+                # Insert for Actor
+                val = each["actor"]["id"], each["actor"]["login"], each["actor"]["display_login"], each["actor"]["gravatar_id"], each["actor"]["url"], each["actor"]["avatar_url"]
+                sql_insert = table_insert_actor % str(val)
+                cur.execute(sql_insert)
+                conn.commit()
+
+                # Insert for Event
+                try: val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"], each["org"]["id"]
+                except: val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"],
+                sql_insert = table_insert_event % str(val)
+                cur.execute(sql_insert)
+                conn.commit()
+
 
 def main():
     conn = psycopg2.connect(

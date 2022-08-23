@@ -29,12 +29,12 @@ CREATE TABLE public.Actor (
 
 CREATE TABLE public.Event (
                 event_id VARCHAR(20) NOT NULL,
-                event_repo_id BIGINT NOT NULL,
-                event_actor_id BIGINT NOT NULL,
-                event_org_id BIGINT,
                 event_type VARCHAR(50) NOT NULL,
                 event_public BOOLEAN NOT NULL,
                 event_created_at TIMESTAMP NOT NULL,
+                event_repo_id BIGINT NOT NULL,
+                event_actor_id BIGINT NOT NULL,
+                event_org_id BIGINT,
                 PRIMARY KEY (event_id),
                 FOREIGN KEY (event_repo_id)  REFERENCES Repo  (repo_id),
                 FOREIGN KEY (event_actor_id) REFERENCES Actor (actor_id),
