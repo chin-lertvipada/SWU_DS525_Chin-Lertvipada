@@ -15,7 +15,7 @@ table_create_repo = """
     );
 """
 table_create_org = """
-    CREATE TABLE IF NOT EXISTS Repo (
+    CREATE TABLE IF NOT EXISTS Org (
         org_id BIGINT NOT NULL,
         org_login VARCHAR(50) NOT NULL,
         org_gravatar_id VARCHAR(50),
@@ -25,7 +25,7 @@ table_create_org = """
     );
 """
 table_create_actor = """
-    CREATE TABLE IF NOT EXISTS Repo (
+    CREATE TABLE IF NOT EXISTS Actor (
         actor_id BIGINT NOT NULL,
         actor_login VARCHAR(50) NOT NULL,
         actor_display_login VARCHAR(50) NOT NULL,
@@ -36,7 +36,7 @@ table_create_actor = """
     );
 """
 table_create_event = """
-    CREATE TABLE IF NOT EXISTS Repo (
+    CREATE TABLE IF NOT EXISTS Event (
         event_id VARCHAR(20) NOT NULL,
         event_type VARCHAR(50) NOT NULL,
         event_public BOOLEAN NOT NULL,
@@ -51,9 +51,11 @@ table_create_event = """
     );
 """
 
+drop_table_queries   = [table_drop_event, table_drop_repo, table_drop_org, table_drop_actor]
 create_table_queries = [table_create_repo, table_create_org, table_create_actor, table_create_event]
-drop_table_queries   = [table_drop_repo, table_drop_org, table_drop_actor, table_drop_event]
 
+
+PostgresCursor,PostgresConn = 0,0
 
 def drop_tables(cur: PostgresCursor, conn: PostgresConn) -> None:
     """
@@ -62,7 +64,6 @@ def drop_tables(cur: PostgresCursor, conn: PostgresConn) -> None:
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
-
 
 def create_tables(cur: PostgresCursor, conn: PostgresConn) -> None:
     """
@@ -95,3 +96,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
