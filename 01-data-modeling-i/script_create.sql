@@ -1,4 +1,4 @@
-CREATE TABLE public.Repo (
+CREATE TABLE Repo (
                 repo_id BIGINT NOT NULL,
                 repo_name VARCHAR(100) NOT NULL,
                 repo_url VARCHAR(150) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE public.Repo (
 );
 
 
-CREATE TABLE public.Org (
+CREATE TABLE Org (
                 org_id BIGINT NOT NULL,
                 org_login VARCHAR(50) NOT NULL,
                 org_gravatar_id VARCHAR(50),
@@ -16,7 +16,7 @@ CREATE TABLE public.Org (
 );
 
 
-CREATE TABLE public.Actor (
+CREATE TABLE Actor (
                 actor_id BIGINT NOT NULL,
                 actor_login VARCHAR(50) NOT NULL,
                 actor_display_login VARCHAR(50) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE public.Actor (
 );
 
 
-CREATE TABLE public.Event (
+CREATE TABLE Event (
                 event_id VARCHAR(20) NOT NULL,
                 event_type VARCHAR(50) NOT NULL,
                 event_public BOOLEAN NOT NULL,

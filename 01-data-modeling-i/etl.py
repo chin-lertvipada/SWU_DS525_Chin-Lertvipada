@@ -20,8 +20,8 @@ def get_files(filepath: str) -> List[str]:
 
     all_files = []
     for root, dirs, files in os.walk(filepath):
-        # files = glob.glob(os.path.join(root, "*.json"))
-        files = glob.glob(os.path.join(root, "github_events.json"))
+        files = glob.glob(os.path.join(root, "*.json"))
+        # files = glob.glob(os.path.join(root, "github_events.json"))
         for f in files:
             all_files.append(os.path.abspath(f))
 
