@@ -26,6 +26,24 @@ CREATE TABLE Actor (
                 PRIMARY KEY (actor_id)
 );
 
+CREATE TABLE Commit (
+                commit_sha VARCHAR(100) NOT NULL,
+                commit_email VARCHAR(100) NOT NULL,
+                commit_name VARCHAR(100) NOT NULL,
+                commit_url VARCHAR(200) NOT NULL,
+                PRIMARY KEY (commit_sha)
+);
+
+
+CREATE TABLE Payload (
+                payload_push_id BIGINT NOT NULL,
+                payload_size BIGINT NOT NULL,
+                payload_ref VARCHAR(200) NOT NULL,
+                payload_commit_sha VARCHAR(100),
+                PRIMARY KEY (payload_push_id),
+                FOREIGN KEY (payload_commit_sha)  REFERENCES Commit (commit_sha)
+);
+
 
 CREATE TABLE Event (
                 event_id VARCHAR(20) NOT NULL,
@@ -35,8 +53,10 @@ CREATE TABLE Event (
                 event_repo_id BIGINT NOT NULL,
                 event_actor_id BIGINT NOT NULL,
                 event_org_id BIGINT,
+                event_payload_push_id BIGINT,
                 PRIMARY KEY (event_id),
-                FOREIGN KEY (event_repo_id)  REFERENCES Repo  (repo_id),
-                FOREIGN KEY (event_actor_id) REFERENCES Actor (actor_id),
-                FOREIGN KEY (event_org_id)   REFERENCES Org   (org_id)
+                FOREIGN KEY (event_repo_id)     REFERENCES Repo     (repo_id),
+                FOREIGN KEY (event_actor_id)    REFERENCES Actor    (actor_id),
+                FOREIGN KEY (event_org_id)      REFERENCES Org      (org_id),
+                FOREIGN KEY (event_payload_push_id)  REFERENCES Payload  (payload_push_id)
 );

@@ -1,10 +1,12 @@
 import psycopg2
 
 
-table_drop_repo  = "DROP TABLE IF EXISTS Repo;"
-table_drop_org   = "DROP TABLE IF EXISTS Org;"
-table_drop_actor = "DROP TABLE IF EXISTS Actor;"
-table_drop_event = "DROP TABLE IF EXISTS Event;"
+table_drop_repo    = "DROP TABLE IF EXISTS Repo;"
+table_drop_org     = "DROP TABLE IF EXISTS Org;"
+table_drop_actor   = "DROP TABLE IF EXISTS Actor;"
+table_drop_commit  = "DROP TABLE IF EXISTS Commit;"
+table_drop_payload = "DROP TABLE IF EXISTS Payload;"
+table_drop_event   = "DROP TABLE IF EXISTS Event;"
 
 table_create_repo = """
     CREATE TABLE IF NOT EXISTS Repo (
@@ -35,6 +37,25 @@ table_create_actor = """
         PRIMARY KEY (actor_id)
     );
 """
+table_create_commit = """
+    CREATE TABLE IF NOT EXISTS Commit (
+        commit_sha VARCHAR(100) NOT NULL,
+        commit_email VARCHAR(100) NOT NULL,
+        commit_name VARCHAR(100) NOT NULL,
+        commit_url VARCHAR(200) NOT NULL,
+        PRIMARY KEY (commit_sha)
+    );
+"""
+table_create_payload = """
+    CREATE TABLE IF NOT EXISTS Commit (
+        payload_push_id BIGINT NOT NULL,
+        payload_size BIGINT NOT NULL,
+        payload_ref VARCHAR(200) NOT NULL,
+        payload_commit_sha VARCHAR(100),
+        PRIMARY KEY (payload_push_id),
+        FOREIGN KEY (payload_commit_sha)  REFERENCES Commit (commit_sha)
+    );
+"""
 table_create_event = """
     CREATE TABLE IF NOT EXISTS Event (
         event_id VARCHAR(20) NOT NULL,
@@ -44,15 +65,17 @@ table_create_event = """
         event_repo_id BIGINT NOT NULL,
         event_actor_id BIGINT NOT NULL,
         event_org_id BIGINT,
+        event_payload_push_id BIGINT,
         PRIMARY KEY (event_id),
-        FOREIGN KEY (event_repo_id)  REFERENCES Repo  (repo_id),
-        FOREIGN KEY (event_actor_id) REFERENCES Actor (actor_id),
-        FOREIGN KEY (event_org_id)   REFERENCES Org   (org_id)
+        FOREIGN KEY (event_repo_id)     REFERENCES Repo     (repo_id),
+        FOREIGN KEY (event_actor_id)    REFERENCES Actor    (actor_id),
+        FOREIGN KEY (event_org_id)      REFERENCES Org      (org_id),
+        FOREIGN KEY (event_payload_push_id)  REFERENCES Payload  (payload_push_id)
     );
 """
 
-drop_table_queries   = [table_drop_event, table_drop_repo, table_drop_org, table_drop_actor]
-create_table_queries = [table_create_repo, table_create_org, table_create_actor, table_create_event]
+drop_table_queries   = [table_drop_event, table_drop_repo, table_drop_org, table_drop_actor, table_drop_payload, table_drop_commit]
+create_table_queries = [table_create_repo, table_create_org, table_create_actor, table_create_commit, table_create_payload, table_create_event]
 
 
 PostgresCursor,PostgresConn = 0,0
