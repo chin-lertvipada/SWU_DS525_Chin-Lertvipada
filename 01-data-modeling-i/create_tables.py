@@ -4,7 +4,7 @@ import psycopg2
 table_drop_repo    = "DROP TABLE IF EXISTS Repo;"
 table_drop_org     = "DROP TABLE IF EXISTS Org;"
 table_drop_actor   = "DROP TABLE IF EXISTS Actor;"
-table_drop_commit  = "DROP TABLE IF EXISTS Commit;"
+table_drop_commit  = "DROP TABLE IF EXISTS Committed;"
 table_drop_payload = "DROP TABLE IF EXISTS Payload;"
 table_drop_event   = "DROP TABLE IF EXISTS Event;"
 
@@ -38,7 +38,7 @@ table_create_actor = """
     );
 """
 table_create_commit = """
-    CREATE TABLE IF NOT EXISTS Commit (
+    CREATE TABLE IF NOT EXISTS Committed (
         commit_sha VARCHAR(100) NOT NULL,
         commit_email VARCHAR(100) NOT NULL,
         commit_name VARCHAR(100) NOT NULL,
@@ -47,13 +47,13 @@ table_create_commit = """
     );
 """
 table_create_payload = """
-    CREATE TABLE IF NOT EXISTS Commit (
-        payload_push_id BIGINT NOT NULL,
-        payload_size BIGINT NOT NULL,
-        payload_ref VARCHAR(200) NOT NULL,
-        payload_commit_sha VARCHAR(100),
-        PRIMARY KEY (payload_push_id),
-        FOREIGN KEY (payload_commit_sha)  REFERENCES Commit (commit_sha)
+    CREATE TABLE IF NOT EXISTS Payload (
+                payload_push_id BIGINT NOT NULL,
+                payload_size BIGINT NOT NULL,
+                payload_ref VARCHAR(200) NOT NULL,
+                payload_commit_sha VARCHAR(100),
+                PRIMARY KEY (payload_push_id),
+                FOREIGN KEY (payload_commit_sha)  REFERENCES Committed (commit_sha)
     );
 """
 table_create_event = """

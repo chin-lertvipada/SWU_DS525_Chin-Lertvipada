@@ -1,5 +1,5 @@
 #etl.py
-from asyncio.windows_events import NULL
+#import Library
 import glob
 import json
 import os
@@ -11,9 +11,11 @@ import psycopg2
 table_insert_repo    = "INSERT INTO Repo VALUES %s ON CONFLICT DO NOTHING;"
 table_insert_org     = "INSERT INTO Org VALUES %s ON CONFLICT DO NOTHING;"
 table_insert_actor   = "INSERT INTO Actor VALUES %s ON CONFLICT DO NOTHING;"
-table_insert_commit  = "INSERT INTO Commit VALUES %s ON CONFLICT DO NOTHING;"
+table_insert_commit  = "INSERT INTO Committed VALUES %s ON CONFLICT DO NOTHING;"
 table_insert_payload = "INSERT INTO Payload VALUES %s ON CONFLICT DO NOTHING;"
 table_insert_event   = "INSERT INTO Event VALUES %s ON CONFLICT DO NOTHING;"
+table_insert_event_missOrg   = "INSERT INTO Event (event_id,event_type,event_public,event_created_at,event_repo_id,event_actor_id,event_payload_push_id) VALUES %s ON CONFLICT DO NOTHING;"
+table_insert_event_missBoth   = "INSERT INTO Event (event_id,event_type,event_public,event_created_at,event_repo_id,event_actor_id) VALUES %s ON CONFLICT DO NOTHING;"
 
 
 def get_files(filepath: str) -> List[str]:
@@ -42,6 +44,7 @@ def process(cur, conn, filepath):
         with open(datafile, "r") as f:
             data = json.loads(f.read())
             for each in data:
+                sql_insert = ''
 
                 # Insert for Repo
                 val = each["repo"]["id"], each["repo"]["name"], each["repo"]["url"]
@@ -64,29 +67,43 @@ def process(cur, conn, filepath):
                 except: pass
 
                 # Insert for Commit
+                sha = ''
                 try:
-                    val = each["payload"]["commits"]["sha"], each["payload"]["commits"]["author"]["email"], each["payload"]["commits"]["author"]["name"], each["payload"]["commits"]["url"]
-                    sql_insert = table_insert_commit % str(val)
-                    cur.execute(sql_insert)
-                    conn.commit()
+                    for cmt in each["payload"]["commits"]:
+                        val = cmt["sha"], cmt["author"]["email"], cmt["author"]["name"], cmt["url"]
+                        sha = cmt["sha"]
+                        sql_insert = table_insert_commit % str(val)
+                        cur.execute(sql_insert)
+                        conn.commit()
                 except: pass
 
                 # Insert for Payload
                 try:
-                    val = each["payload"]["push_id"], each["payload"]["size"], each["payload"]["ref"], each["payload"]["commits"]["sha"]
+                    if sha == '':
+                        val = each["payload"]["push_id"], each["payload"]["size"], each["payload"]["ref"], 
+                    else:
+                        val = each["payload"]["push_id"], each["payload"]["size"], each["payload"]["ref"], sha
                     sql_insert = table_insert_payload % str(val)
                     cur.execute(sql_insert)
                     conn.commit()
                 except: pass
 
                 # Insert for Event
-                try: val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"], each["org"]["id"], each["payload"]["push_id"]
+                try: 
+                    val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"], each["org"]["id"], each["payload"]["push_id"]
+                    sql_insert = table_insert_event % str(val)
                 except: 
-                    try: val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"], each["org"]["id"], NULL
+                    try: 
+                        val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"], each["org"]["id"], 
+                        sql_insert = table_insert_event % str(val)
                     except: 
-                        try: val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"], NULL, each["payload"]["push_id"]
-                        except: val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"], NULL, NULL
-                sql_insert = table_insert_event % str(val)
+                        try: 
+                            val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"],each["payload"]["push_id"]
+                            sql_insert = table_insert_event_missOrg % str(val)
+                        except: 
+                            val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"]
+                            sql_insert = table_insert_event_missBoth % str(val)
+
                 cur.execute(sql_insert)
                 conn.commit()
 
