@@ -11,7 +11,6 @@
 <br>
 
 ## Project implementation instruction
-<br>
 
 ### Implementation steps
 
