@@ -1,5 +1,10 @@
 # Data modeling i
 
+## Data model
+https://raw.githubusercontent.com/chin-lertvipada/swu-ds525/main/01-data-modeling-i/Doc/Data%20model.png
+<br>
+<br>
+
 ## Project implementation instruction
 <br>
 
