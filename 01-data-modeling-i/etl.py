@@ -50,20 +50,17 @@ def process(cur, conn, filepath):
                 val = each["repo"]["id"], each["repo"]["name"], each["repo"]["url"]
                 sql_insert = table_insert_repo % str(val)
                 cur.execute(sql_insert)
-                conn.commit()
 
                 # Insert for Actor
                 val = each["actor"]["id"], each["actor"]["login"], each["actor"]["display_login"], each["actor"]["gravatar_id"], each["actor"]["url"], each["actor"]["avatar_url"]
                 sql_insert = table_insert_actor % str(val)
                 cur.execute(sql_insert)
-                conn.commit()
 
                 # Insert for Org
                 try:
                     val = each["org"]["id"], each["org"]["login"], each["org"]["gravatar_id"], each["org"]["url"], each["org"]["avatar_url"]
                     sql_insert = table_insert_org % str(val)
                     cur.execute(sql_insert)
-                    conn.commit()
                 except: pass
 
                 # Insert for Commit
@@ -74,7 +71,6 @@ def process(cur, conn, filepath):
                         sha = cmt["sha"]
                         sql_insert = table_insert_commit % str(val)
                         cur.execute(sql_insert)
-                        conn.commit()
                 except: pass
 
                 # Insert for Payload
@@ -85,7 +81,6 @@ def process(cur, conn, filepath):
                         val = each["payload"]["push_id"], each["payload"]["size"], each["payload"]["ref"], sha
                     sql_insert = table_insert_payload % str(val)
                     cur.execute(sql_insert)
-                    conn.commit()
                 except: pass
 
                 # Insert for Event
@@ -103,9 +98,9 @@ def process(cur, conn, filepath):
                         except: 
                             val = each["id"], each["type"], each["public"], each["created_at"], each["repo"]["id"], each["actor"]["id"]
                             sql_insert = table_insert_event_missBoth % str(val)
-
                 cur.execute(sql_insert)
-                conn.commit()
+            
+            conn.commit()
 
 
 def main():
