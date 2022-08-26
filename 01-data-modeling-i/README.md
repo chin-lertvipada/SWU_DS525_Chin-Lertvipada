@@ -1,7 +1,12 @@
 # Data modeling i
 
 ## Data model
-https://raw.githubusercontent.com/chin-lertvipada/swu-ds525/main/01-data-modeling-i/Doc/Data%20model.png
+[DataModel](https://github.com/chin-lertvipada/swu-ds525/blob/4593af8ead7be2bcf4e89b28ff1875750422cd1a/01-data-modeling-i/Doc/Data%20model.png)
+<br>
+<br>
+
+## Documentation
+[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/4593af8ead7be2bcf4e89b28ff1875750422cd1a/01-data-modeling-i/Doc/Week%201%20-%20Data%20model%20i%20-%20Summary%20-%20Chin_Lertvipada_64199130039.pdf)
 <br>
 <br>
 
