@@ -104,6 +104,9 @@ def create_tables(session):
 
 
 def process(session, filepath):
+
+    cnt_repo, cnt_actor = {}, {}
+
     # Get list of files from filepath
     all_files = get_files(filepath)
 
@@ -111,7 +114,6 @@ def process(session, filepath):
         with open(datafile, "r") as f:
             data = json.loads(f.read())
 
-            cnt_repo, cnt_actor = {}, {}
             for each in data:
                 # Insert table_create_index
                 try: 
@@ -143,17 +145,17 @@ def process(session, filepath):
                     cnt_repo[each["repo"]["name"]] = [each["id"]]
 
 
-            # Insert table_create_mostActActors
-            for k, v in cnt_actor.items():
-                query = "INSERT INTO mostActActors (actor_display_login, cnt) VALUES ('%s', %s)" \
-                        % (k, len(v))
-                session.execute(query)
+    # Insert table_create_mostActActors
+    for k, v in cnt_actor.items():
+        query = "INSERT INTO mostActActors (actor_display_login, cnt) VALUES ('%s', %s)" \
+                % (k, len(v))
+        session.execute(query)
 
-            # Insert table_create_mostReachRepos
-            for k, v in cnt_repo.items():
-                query = "INSERT INTO mostReachRepos (repo_name, cnt) VALUES ('%s', %s)" \
-                        % (k, len(v))
-                session.execute(query)
+    # Insert table_create_mostReachRepos
+    for k, v in cnt_repo.items():
+        query = "INSERT INTO mostReachRepos (repo_name, cnt) VALUES ('%s', %s)" \
+                % (k, len(v))
+        session.execute(query)
 
 
 def main():
@@ -187,17 +189,17 @@ def main():
         FROM indexs --WHERE event_type = 'PushEvent' ORDER BY event_created_at DESC
     """
     query_mostActActors = """
-    SELECT actor_display_login, cnt FROM mostActActors WHERE cnt > 1 ALLOW FILTERING
+    SELECT actor_display_login, cnt FROM mostActActors WHERE cnt > 2 ALLOW FILTERING
     """
     query_mostReachRepos = """
-    SELECT repo_name, cnt FROM mostReachRepos WHERE cnt > 1 ALLOW FILTERING
+    SELECT repo_name, cnt FROM mostReachRepos WHERE cnt > 2 ALLOW FILTERING
     """
     # query_mostReachRepos = """
     # SELECT * FROM v_mostReachRepos
     # """
 
     try:
-        rows = session.execute(query_mostActActors)
+        rows = session.execute(query_mostReachRepos)
     except Exception as e:
         print(e)
 
