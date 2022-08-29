@@ -6,7 +6,7 @@
 <br>
 
 ## Documentation
-[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/7f623043c57585bae86fe47798b0afc94b998678/02-data-modeling-ii/Doc/Week%202%20-%20Data%20model%20ii%20-%20Summary.pdf)
+[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/d328e6f81b0227ea951671c67f1b2c2e54296b2c/02-data-modeling-ii/Doc/Week%202%20-%20Data%20model%20ii%20-%20Summary.pdf)
 <br>
 <br>
 
