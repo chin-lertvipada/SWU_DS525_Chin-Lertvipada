@@ -199,7 +199,7 @@ def main():
     # """
 
     try:
-        rows = session.execute(query_mostReachRepos)
+        rows = session.execute(query_index)
     except Exception as e:
         print(e)
 
