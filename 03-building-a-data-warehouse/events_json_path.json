@@ -4,6 +4,8 @@
     "$.type",
     "$.actor.login",
     "$.repo.name",
-    "$.created_at"
+    "$.public",
+    "$.created_at",
+    "$.org.login"
   ]
 }

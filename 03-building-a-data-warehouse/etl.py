@@ -2,6 +2,7 @@ import psycopg2
 
 
 drop_table_queries = [
+    "DROP TABLE IF EXISTS staging_events",
     "DROP TABLE IF EXISTS events",
 ]
 create_table_queries = [
@@ -22,9 +23,9 @@ create_table_queries = [
 ]
 copy_table_queries = [
     """
-    COPY staging_events FROM 's3://zkan-swu-labs/github_events_01.json'
+    COPY staging_events FROM 's3://chin-swu-labs/github_events_01.json'
     CREDENTIALS 'aws_iam_role=arn:aws:iam::377290081649:role/LabRole'
-    JSON 's3://zkan-swu-labs/events_json_path.json'
+    JSON 's3://chin-swu-labs/events_json_path.json'
     REGION 'us-east-1'
     """,
 ]
