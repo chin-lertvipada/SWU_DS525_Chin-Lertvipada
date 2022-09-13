@@ -3,26 +3,52 @@ import psycopg2
 
 drop_table_queries = [
     "DROP TABLE IF EXISTS events",
+    "DROP TABLE IF EXISTS actors",
+    "DROP TABLE IF EXISTS repos",
 ]
 create_table_queries = [
     """
     CREATE TABLE IF NOT EXISTS staging_events (
         id text,
         type text,
-        actor text,
-        repo text,
-        created_at text
+        actor_id bigint,
+        actor_name text,
+        actor_url text,
+        repo_id bigint,
+        repo_name text,
+        repo_url text,
+        public boolean,
+        created_at timestamp,
+        org text
     )
     """,
     """
     CREATE TABLE IF NOT EXISTS events (
-        id int
+        id text,
+        type text,
+        actor text,
+        repo text,
+        created_at timestamp
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS actors (
+        id bigint,
+        name text,
+        url text
+    )
+    """,
+    """
+    CREATE TABLE IF NOT EXISTS repos (
+        id bigint,
+        name text,
+        url text
     )
     """,
 ]
 copy_table_queries = [
     """
-    COPY staging_events FROM 's3://zkan-swu-labs/github_events_01.json'
+    COPY staging_events FROM 's3://chin-swu-lab3/github_events_01.json'
     CREDENTIALS 'aws_iam_role=arn:aws:iam::377290081649:role/LabRole'
     JSON 's3://zkan-swu-labs/events_json_path.json'
     REGION 'us-east-1'
@@ -30,16 +56,22 @@ copy_table_queries = [
 ]
 insert_table_queries = [
     """
-    INSERT INTO
-      events (
-        id
-      )
-    SELECT
-      DISTINCT id,
-    FROM
-      staging_events
-    WHERE
-      id NOT IN (SELECT DISTINCT id FROM events)
+    INSERT INTO events ( id, type, actor, repo, created_at )
+    SELECT DISTINCT id, type, actor_name, repo_name, created_at
+    FROM staging_events
+    WHERE id NOT IN (SELECT DISTINCT id FROM events)
+    """,
+    """
+    INSERT INTO actors ( id, name, url )
+    SELECT DISTINCT actor_id, actor_name, actor_url
+    FROM staging_events
+    WHERE actor_id NOT IN (SELECT DISTINCT id FROM actors)
+    """,
+    """
+    INSERT INTO repos ( id, name, url )
+    SELECT DISTINCT repo_id, repo_name, repo_url
+    FROM staging_events
+    WHERE id NOT IN (SELECT DISTINCT id FROM repos)
     """,
 ]
 
@@ -82,6 +114,14 @@ def main():
     # create_tables(cur, conn)
     # load_tables(cur, conn)
     # insert_tables(cur, conn)
+
+    # query data
+    query = "select * from category"
+    cur.execute(query)
+    # print data
+    records = cur.fetchall()
+    for row in records:
+        print(row)
 
     conn.close()
 
