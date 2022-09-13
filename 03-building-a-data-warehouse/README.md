@@ -76,9 +76,13 @@ $ python etl.py
 
 <br>
 
-### 10.	Check the data in cluster by ‘query editor’
+### 10.	Check the data in cluster by ‘query editor’ (exported as csv):
+&nbsp;&nbsp;[staging_events](https://github.com/chin-lertvipada/swu-ds525/blob/1493a0cd6e0d75c1df18463aa85d11cb7effb3a8/03-building-a-data-warehouse/Doc/result/staging_events.csv) <br>
+&nbsp;&nbsp;[events](https://github.com/chin-lertvipada/swu-ds525/blob/1493a0cd6e0d75c1df18463aa85d11cb7effb3a8/03-building-a-data-warehouse/Doc/result/events.csv) <br>
+&nbsp;&nbsp;[actors](https://github.com/chin-lertvipada/swu-ds525/blob/1493a0cd6e0d75c1df18463aa85d11cb7effb3a8/03-building-a-data-warehouse/Doc/result/actors.csv) <br>
+&nbsp;&nbsp;[repos](https://github.com/chin-lertvipada/swu-ds525/blob/1493a0cd6e0d75c1df18463aa85d11cb7effb3a8/03-building-a-data-warehouse/Doc/result/repos.csv)
 
-<br><br>
+<br>
 
 ## Shutdown steps
 
