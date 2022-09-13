@@ -6,6 +6,7 @@ drop_table_queries = [
     "DROP TABLE IF EXISTS actors",
     "DROP TABLE IF EXISTS repos",
 ]
+
 create_table_queries = [
     """
     CREATE TABLE IF NOT EXISTS staging_events (
@@ -18,8 +19,7 @@ create_table_queries = [
         repo_name text,
         repo_url text,
         public boolean,
-        created_at timestamp,
-        org text
+        created_at timestamp
     )
     """,
     """
@@ -46,11 +46,12 @@ create_table_queries = [
     )
     """,
 ]
+
 copy_table_queries = [
     """
     COPY staging_events FROM 's3://chin-swu-lab3/github_events_01.json'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::377290081649:role/LabRole'
-    JSON 's3://zkan-swu-labs/events_json_path.json'
+    CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
+    JSON 's3://chin-swu-lab3/events_json_path.json'
     REGION 'us-east-1'
     """,
 ]
@@ -103,20 +104,20 @@ def insert_tables(cur, conn):
 def main():
     host = "redshift-cluster-1.c7om6vv9mbp9.us-east-1.redshift.amazonaws.com"
     dbname = "dev"
+    port = "5439"
     user = "awsuser"
     password = "awsPassword1"
-    port = "5439"
     conn_str = f"host={host} dbname={dbname} user={user} password={password} port={port}"
     conn = psycopg2.connect(conn_str)
     cur = conn.cursor()
 
-    # drop_tables(cur, conn)
-    # create_tables(cur, conn)
-    # load_tables(cur, conn)
-    # insert_tables(cur, conn)
+    drop_tables(cur, conn)
+    create_tables(cur, conn)
+    load_staging_tables(cur, conn)
+    insert_tables(cur, conn)
 
     # query data
-    query = "select * from category"
+    query = "select * from events"
     cur.execute(query)
     # print data
     records = cur.fetchall()

@@ -9,7 +9,6 @@
     "$.repo.name",
     "$.repo.url",
     "$.public",
-    "$.created_at",
-    "$.org.login"
+    "$.created_at"
   ]
 }
