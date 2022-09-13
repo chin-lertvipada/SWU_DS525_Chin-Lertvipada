@@ -1,11 +1,11 @@
 # Building a Data Warehouse
 
 ## Data model
-[DataModel](https://github.com/chin-lertvipada/swu-ds525/blob/fa05faf71f78d7b0c9a7f9c4c75ef55653769749/02-data-modeling-ii/Doc/02-data-modeling-ii.png)
+[DataModel](https://github.com/chin-lertvipada/swu-ds525/blob/f488152fb40274e07f5a9baf0ebedd523fbaa8ec/03-building-a-data-warehouse/Doc/03-building-dwh.png)
 <br>
 
 ## Documentation
-[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/d328e6f81b0227ea951671c67f1b2c2e54296b2c/02-data-modeling-ii/Doc/Week%202%20-%20Data%20model%20ii%20-%20Summary.pdf)
+[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/f488152fb40274e07f5a9baf0ebedd523fbaa8ec/03-building-a-data-warehouse/Doc/Week%203%20-%20Building%20dwh%20-%20Summary.pdf)
 <br>
 __________
 <br>
