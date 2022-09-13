@@ -3,27 +3,13 @@ import psycopg2
 
 drop_table_queries = [
     "DROP TABLE IF EXISTS events",
-    "DROP TABLE IF EXISTS actors",
-    "DROP TABLE IF EXISTS repos",
+    # "DROP TABLE IF EXISTS actors",
+    # "DROP TABLE IF EXISTS repos",
 ]
 
 create_table_queries = [
     """
     CREATE TABLE IF NOT EXISTS staging_events (
-        id text,
-        type text,
-        actor_id bigint,
-        actor_name text,
-        actor_url text,
-        repo_id bigint,
-        repo_name text,
-        repo_url text,
-        public boolean,
-        created_at timestamp
-    )
-    """,
-    """
-    CREATE TABLE IF NOT EXISTS events (
         id text,
         type text,
         actor text,
@@ -32,49 +18,83 @@ create_table_queries = [
     )
     """,
     """
-    CREATE TABLE IF NOT EXISTS actors (
-        id bigint,
-        name text,
-        url text
+    CREATE TABLE IF NOT EXISTS events (
+        id text
     )
     """,
-    """
-    CREATE TABLE IF NOT EXISTS repos (
-        id bigint,
-        name text,
-        url text
-    )
-    """,
+    # """
+    # CREATE TABLE IF NOT EXISTS staging_events (
+    #     id text,
+    #     type text,
+    #     actor_id bigint,
+    #     actor_name text,
+    #     actor_url text,
+    #     repo_id bigint,
+    #     repo_name text,
+    #     repo_url text,
+    #     public boolean,
+    #     created_at timestamp
+    # )
+    # """,
+    # """
+    # CREATE TABLE IF NOT EXISTS events (
+    #     id text,
+    #     type text,
+    #     actor text,
+    #     repo text,
+    #     created_at timestamp
+    # )
+    # """,
+    # """
+    # CREATE TABLE IF NOT EXISTS actors (
+    #     id bigint,
+    #     name text,
+    #     url text
+    # )
+    # """,
+    # """
+    # CREATE TABLE IF NOT EXISTS repos (
+    #     id bigint,
+    #     name text,
+    #     url text
+    # )
+    # """,
 ]
 
 copy_table_queries = [
     """
-    COPY staging_events FROM 's3://chin-swu-lab3/github_events_01.json'
+    COPY staging_events FROM 's3://chin-swu-lab/github_events_01.json'
     CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
-    JSON 's3://chin-swu-lab3/events_json_path.json'
+    JSON 's3://chin-swu-lab/events_json_path.json'
     REGION 'us-east-1'
     """,
 ]
 
 insert_table_queries = [
     """
-    INSERT INTO events ( id, type, actor, repo, created_at )
-    SELECT DISTINCT id, type, actor_name, repo_name, created_at
+    INSERT INTO events ( id )
+    SELECT DISTINCT id 
     FROM staging_events
     WHERE id NOT IN (SELECT DISTINCT id FROM events)
     """,
-    """
-    INSERT INTO actors ( id, name, url )
-    SELECT DISTINCT actor_id, actor_name, actor_url
-    FROM staging_events
-    WHERE actor_id NOT IN (SELECT DISTINCT id FROM actors)
-    """,
-    """
-    INSERT INTO repos ( id, name, url )
-    SELECT DISTINCT repo_id, repo_name, repo_url
-    FROM staging_events
-    WHERE id NOT IN (SELECT DISTINCT id FROM repos)
-    """,
+    # """
+    # INSERT INTO events ( id, type, actor, repo, created_at )
+    # SELECT DISTINCT id, type, actor_name, repo_name, created_at
+    # FROM staging_events
+    # WHERE id NOT IN (SELECT DISTINCT id FROM events)
+    # """,
+    # """
+    # INSERT INTO actors ( id, name, url )
+    # SELECT DISTINCT actor_id, actor_name, actor_url
+    # FROM staging_events
+    # WHERE actor_id NOT IN (SELECT DISTINCT id FROM actors)
+    # """,
+    # """
+    # INSERT INTO repos ( id, name, url )
+    # SELECT DISTINCT repo_id, repo_name, repo_url
+    # FROM staging_events
+    # WHERE id NOT IN (SELECT DISTINCT id FROM repos)
+    # """,
 ]
 
 
@@ -104,8 +124,8 @@ def insert_tables(cur, conn):
 
 def main():
     host = "redshift-cluster-1.c7om6vv9mbp9.us-east-1.redshift.amazonaws.com"
-    dbname = "dev"
     port = "5439"
+    dbname = "dev"
     user = "awsuser"
     password = "awsPassword1"
     conn_str = f"host={host} dbname={dbname} user={user} password={password} port={port}"
