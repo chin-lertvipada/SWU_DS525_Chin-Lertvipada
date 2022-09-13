@@ -55,6 +55,7 @@ copy_table_queries = [
     REGION 'us-east-1'
     """,
 ]
+
 insert_table_queries = [
     """
     INSERT INTO events ( id, type, actor, repo, created_at )
@@ -113,6 +114,15 @@ def main():
 
     drop_tables(cur, conn)
     create_tables(cur, conn)
+
+    # query data
+    query = "select * from events"
+    cur.execute(query)
+    # print data
+    records = cur.fetchall()
+    for row in records:
+        print(row)
+
     load_staging_tables(cur, conn)
     insert_tables(cur, conn)
 
