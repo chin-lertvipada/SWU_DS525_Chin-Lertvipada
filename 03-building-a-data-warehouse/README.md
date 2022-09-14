@@ -1,10 +1,7 @@
 # Building a Data Warehouse
 
 ## Data model
-[DataModel](https://github.com/chin-lertvipada/swu-ds525/blob/f488152fb40274e07f5a9baf0ebedd523fbaa8ec/03-building-a-data-warehouse/Doc/03-building-dwh.png)
-<br>
-
-![DataModel2](Doc/03-building-dwh.png)
+![DataModel](Doc/03-building-dwh.png)
 <br>
 
 ## Documentation
@@ -14,6 +11,8 @@ __________
 <br>
 
 ## Project implementation instruction
+<br>
+
 
 ### 1. change directory to project 02-data-modeling-ii:
 ```sh
@@ -35,10 +34,10 @@ $ source ENV/bin/activate
 $ pip install -r requirements.txt
 ```
 
-### 5. Create AWSRedshift cluster:
+### 5. Create AWS Redshift cluster (with following config):
 ```sh
 - 'Cluster identification'  : redshift-cluster-1
-- 'Cluster for?'            : Production
+- 'Cluster for'             : Production
 - 'Node type'               : ra3.xlplus
 - 'AQUA'                    : Turn off
 - 'Number of nodes'         : 1
@@ -46,14 +45,23 @@ $ pip install -r requirements.txt
 - 'Database password'       : awsPassword1
 - 'Cluster permission'      : LabRole
 - 'Remaining'               : keep as default
-- 'Public access'           : enable public access
 ```
+**!! Don't forget !! - Enable public access to AWS RedShift**
+<br>
+
+![Redshift](Doc/Picture1.png)
+<br>
+
+<br>
 
 ### 6. Upload data file and manifest file to AWS S3:
 &nbsp;&nbsp;&nbsp;a. Create AWS S3 bucket with ‘Full public access’ <br>
 &nbsp;&nbsp;&nbsp;b.	Upload files <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Manifest file : events_json_path.json <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Data file : github_events_01.json
+
+![S3](Doc/Picture2.png)
+<br>
 
 <br>
 
@@ -62,6 +70,8 @@ $ pip install -r requirements.txt
 &nbsp;&nbsp;&nbsp;b. Port : 5439 <br>
 &nbsp;&nbsp;&nbsp;c. Dbname : dev <br>
 &nbsp;&nbsp;&nbsp;d. User/Password : as define when create the cluster 
+![Connection](Doc/Picture3.png)
+<br>
 
 <br>
 
@@ -69,7 +79,7 @@ $ pip install -r requirements.txt
 &nbsp;&nbsp;&nbsp;a. From : the URI to data file <br>
 &nbsp;&nbsp;&nbsp;b. Credentials : the ARN of LabRole <br>
 &nbsp;&nbsp;&nbsp;c. Json : the URI to manifest file <br>
-
+![Copy](Doc/Picture4.png)
 <br>
 
 ### 9. Create tables, Inject data from S3 to Redshift, Insert data, Query data thru python script, named ‘etl.py’:
