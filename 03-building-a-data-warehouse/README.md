@@ -4,6 +4,9 @@
 [DataModel](https://github.com/chin-lertvipada/swu-ds525/blob/f488152fb40274e07f5a9baf0ebedd523fbaa8ec/03-building-a-data-warehouse/Doc/03-building-dwh.png)
 <br>
 
+![DataModel](/Doc/03-building-dwh.png)
+<br>
+
 ## Documentation
 [Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/f488152fb40274e07f5a9baf0ebedd523fbaa8ec/03-building-a-data-warehouse/Doc/Week%203%20-%20Building%20dwh%20-%20Summary.pdf)
 <br>
