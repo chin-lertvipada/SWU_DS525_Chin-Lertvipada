@@ -5,7 +5,7 @@
 <br>
 
 ## Documentation
-[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/f488152fb40274e07f5a9baf0ebedd523fbaa8ec/03-building-a-data-warehouse/Doc/Week%203%20-%20Building%20dwh%20-%20Summary.pdf)
+[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/5ed4d388bca49709e39da5a2a8a7864a63d9e166/04-building-a-data-lake/Doc/Lab4%20-%20Building%20datalake%20-%20Summary.pdf)
 <br>
 __________
 <br>
@@ -37,16 +37,13 @@ $ docker-compose up
 <br>
 
 ### 5. Chcek the cleaned output data in folders, partition by 'date_oprt':
-#### actors
-<br>
+#### actors : [actors](https://github.com/chin-lertvipada/swu-ds525/tree/main/04-building-a-data-lake/actors)
 
-#### repos
-<br>
+#### repos : [repos](https://github.com/chin-lertvipada/swu-ds525/tree/main/04-building-a-data-lake/repos)
 
-#### orgs
-<br>
+#### orgs : [orgs](https://github.com/chin-lertvipada/swu-ds525/tree/main/04-building-a-data-lake/orgs)
 
-#### events
+#### events : [events](https://github.com/chin-lertvipada/swu-ds525/tree/main/04-building-a-data-lake/events)
 <br>
 
 
