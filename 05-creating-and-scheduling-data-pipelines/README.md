@@ -50,9 +50,14 @@ docker-compose up
 - เข้าไปที่หน้า Postgres UI ผ่าน service Adminer ได้ที่ port 8088 (localhost:8088)
 <br><br>
 
-### 6. Data validation:
+### 6. Setup Postgres parameter for Airflow:
+![AirflowConnectionSetup](Doc/AirflowConnectionSetup.png)
+![AirflowConnectPostgres](Doc/AirflowConnectPostgres.png)
+<br><br>
+
+### 7. Data validation:
 - ตรวจสอบการทำงานของ Airflow schedule ที่ตั้งค่าไว้
-![DataModel](Doc/Airflow.png)
+![Airflow](Doc/Airflow.png)
 <br><br>
 - ตรวจสอบข้อมูลที่มีการ load เข้าสู่ tables ตาม schedule ที่กำหนดไว้
-![DataModel](Doc/Postgres.png)
+![Postgres](Doc/Postgres.png)
