@@ -31,3 +31,15 @@ models:
         tests:
           - accepted_values:
               values: ['completed']
+              
+  - name: order
+    description: "Orders with first name and last name"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['completed']
