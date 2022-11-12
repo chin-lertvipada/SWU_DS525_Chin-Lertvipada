@@ -1,4 +1,4 @@
 select
     order_status
-from {{ ref('completed_orders') }}
+from "postgres"."public"."completed_orders"
 where order_status != 'completed'
