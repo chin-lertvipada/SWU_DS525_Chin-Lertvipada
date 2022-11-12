@@ -1,68 +1,15 @@
-# Analytics Engineering
+Welcome to your new dbt project!
 
-Create a dbt project
+### Using the starter project
 
-```sh
-dbt init
-```
+Try running the following commands:
+- dbt run
+- dbt test
 
-Edit the dbt profiles
 
-```sh
-code ~/.dbt/profiles.yml
-```
-
-```yml
-jaffle:
-  outputs:
-
-    dev:
-      type: postgres
-      threads: 1
-      host: localhost
-      port: 5432
-      user: postgres
-      pass: postgres
-      dbname: postgres
-      schema: public
-
-    prod:
-      type: postgres
-      threads: 1
-      host: localhost
-      port: 5432
-      user: postgres
-      pass: postgres
-      dbname: postgres
-      schema: prod
-
-  target: dev
-```
-
-Test dbt connection
-
-```sh
-cd jaffle
-dbt debug
-```
-
-You should see "All checks passed!".
-
-To create models
-
-```sh
-dbt run
-```
-
-To test models
-
-```sh
-dbt test
-```
-
-To view docs (on Gitpod)
-
-```sh
-dbt docs generate
-dbt docs serve --no-browser
-```
+### Resources:
+- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
+- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
+- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
+- Find [dbt events](https://events.getdbt.com) near you
+- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices

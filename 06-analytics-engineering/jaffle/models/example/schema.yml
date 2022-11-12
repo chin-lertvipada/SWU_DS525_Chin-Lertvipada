@@ -20,20 +20,8 @@ models:
           - unique
           - not_null
 
-  - name: completed_order
-    description: "Completed orders with Customer name and lastname"
-    columns :
-      - name: id
-        tests:
-          - unique
-          - not_null
-      - name: status
-        tests:
-          - accepted_values:
-              values: ['completed']
-              
-  - name: order
-    description: "Orders with first name and last name"
+  - name: completed_orders
+    description: "Completed orders with first name and last name"
     columns:
       - name: id
         tests:
