@@ -1,4 +1,5 @@
-# pip3.9 install psycopg2-binary --force-reinstall --no-cache-dir
+# pip install psycopg2-binary --force-reinstall --no-cache-dir
+# https://stackoverflow.com/questions/65059310/apple-m1-install-psycopg2-package-symbol-not-found-pqbackendpid
 import psycopg2
 
 create_table_queries = [
@@ -78,14 +79,6 @@ truncate_table_queries = [
 # cat ~/.aws/credentials
 # https://stackoverflow.com/questions/15261743/how-to-copy-csv-data-file-to-amazon-redshift
 copy_table_queries = [
-    # """
-    # COPY staging_events FROM 's3://zkan-swu-labs/github_events_01.json'
-    # ACCESS_KEY_ID 'your_access_key_id'
-    # SECRET_ACCESS_KEY 'your_secret_access_key'
-    # SESSION_TOKEN 'your_session_token'
-    # JSON 's3://zkan-swu-labs/events_json_path.json'
-    # REGION 'us-east-1'
-    # """,
     """
     COPY leagues 
     FROM 's3://jaochin-dataset-fifa/cleaned/leagues/date_oprt=2022-12-07'
