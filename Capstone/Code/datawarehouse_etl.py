@@ -1,33 +1,30 @@
+# pip3.9 install psycopg2-binary --force-reinstall --no-cache-dir
 import psycopg2
 
 create_table_queries = [
     """
     CREATE TABLE IF NOT EXISTS leagues (
         league_id bigint,
-        league_name text,
-        date_oprt date
+        league_name text
     )
     """,
     """
     CREATE TABLE IF NOT EXISTS clubs (
         club_id bigint,
         club_name text,
-        league_id bigint,
-        date_oprt date
+        league_id bigint
     )
     """,
     """
     CREATE TABLE IF NOT EXISTS nationalities (
         nationality_id bigint,
-        nationality_name text,
-        date_oprt date
+        nationality_name text
     )
     """,
     """
     CREATE TABLE IF NOT EXISTS positions (
-        positions_id bigint,
-        positions_name text,
-        date_oprt date
+        position_id bigint,
+        position_name text
     )
     """,
     """
@@ -36,12 +33,11 @@ create_table_queries = [
         player_name text,
         player_age int,
         player_overall int,
-        player_value double,
-        player_wage double,
-        positions_id bigint,
-        club_id bigint,
+        player_value decimal,
+        player_wage decimal,
+        position_id bigint,
         nationality_id bigint,
-        date_oprt date
+        club_id bigint
     )
     """,
     """
@@ -50,9 +46,9 @@ create_table_queries = [
         player_name text,
         player_age int,
         player_overall int,
-        player_value double,
-        player_wage double,
-        positions_name text,
+        player_value decimal,
+        player_wage decimal,
+        position_name text,
         club_name text,
         nationality_name text,
         league_name text,
@@ -61,64 +57,88 @@ create_table_queries = [
     """,
 ]
 
+truncate_table_queries = [
+    """
+    truncate table leagues
+    """,
+    """
+    truncate table clubs
+    """,
+    """
+    truncate table nationalities
+    """,
+    """
+    truncate table positions
+    """,
+    """
+    truncate table players
+    """,
+]
+
+# cat ~/.aws/credentials
+# https://stackoverflow.com/questions/15261743/how-to-copy-csv-data-file-to-amazon-redshift
 copy_table_queries = [
     # """
-    # COPY staging_events FROM 's3://chin-swu-lab3/github_events_01.json'
-    # CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
-    # JSON 's3://chin-swu-lab3/events_json_path.json'
+    # COPY staging_events FROM 's3://zkan-swu-labs/github_events_01.json'
+    # ACCESS_KEY_ID 'your_access_key_id'
+    # SECRET_ACCESS_KEY 'your_secret_access_key'
+    # SESSION_TOKEN 'your_session_token'
+    # JSON 's3://zkan-swu-labs/events_json_path.json'
     # REGION 'us-east-1'
     # """,
     """
     COPY leagues 
-    FROM 's3://chin-fifa/landing/leagues/date_oprt=2022-12-05/*.csv'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
+    FROM 's3://jaochin-dataset-fifa/cleaned/leagues/date_oprt=2022-12-07'
+    ACCESS_KEY_ID 'ASIAXZM22O2VTY22WUN2'
+    SECRET_ACCESS_KEY 'inf6RDpkjo1c0VfRrVj+2AkamuzoKaqjhw+sGJBS'
+    SESSION_TOKEN 'FwoGZXIvYXdzEBYaDHu7IZUlypFbyWw57yLMAQEIFEdpk2wGBoPRLSB+BWy8QptB57xf3GAke1MlEOrPYKPgWyOLtErARd4/F8X6wJ6m+LEzM8w9dVLqj7/o3vT+l31aDuMowzqbfvlmDm6OndBxZpKiTTugSFGq529eKySX5SLW+7BDcM8F6swsVZimCAU+YBj5YcJca1CVdHb/FZOdT6yrah/UaxXklrWI4U694C1F+v4JkBzSJPGLZypE4u8Oxb/wMXRegA8H33EQz+dEl5LBZ67jPjIvnWMfh/OUNBVEEUg2Uo0GQiihmsKcBjItX3mx3Q+sq1PmSHzoNvhot/pNXyq7YhwF1IB0u/4wUDEtAfQtMCr1nqNcdWSv'
     CSV
+    DELIMITER ','
+    IGNOREHEADER 1
     """,
     """
     COPY clubs 
-    FROM 's3://chin-fifa/landing/clubs/date_oprt=2022-12-05/*.csv'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
+    FROM 's3://jaochin-dataset-fifa/cleaned/clubs/date_oprt=2022-12-07'
+    ACCESS_KEY_ID 'ASIAXZM22O2VTY22WUN2'
+    SECRET_ACCESS_KEY 'inf6RDpkjo1c0VfRrVj+2AkamuzoKaqjhw+sGJBS'
+    SESSION_TOKEN 'FwoGZXIvYXdzEBYaDHu7IZUlypFbyWw57yLMAQEIFEdpk2wGBoPRLSB+BWy8QptB57xf3GAke1MlEOrPYKPgWyOLtErARd4/F8X6wJ6m+LEzM8w9dVLqj7/o3vT+l31aDuMowzqbfvlmDm6OndBxZpKiTTugSFGq529eKySX5SLW+7BDcM8F6swsVZimCAU+YBj5YcJca1CVdHb/FZOdT6yrah/UaxXklrWI4U694C1F+v4JkBzSJPGLZypE4u8Oxb/wMXRegA8H33EQz+dEl5LBZ67jPjIvnWMfh/OUNBVEEUg2Uo0GQiihmsKcBjItX3mx3Q+sq1PmSHzoNvhot/pNXyq7YhwF1IB0u/4wUDEtAfQtMCr1nqNcdWSv'
     CSV
+    DELIMITER ','
+    IGNOREHEADER 1
     """,
     """
     COPY nationalities 
-    FROM 's3://chin-fifa/landing/nationalities/date_oprt=2022-12-05/*.csv'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
+    FROM 's3://jaochin-dataset-fifa/cleaned/nationalities/date_oprt=2022-12-07'
+    ACCESS_KEY_ID 'ASIAXZM22O2VTY22WUN2'
+    SECRET_ACCESS_KEY 'inf6RDpkjo1c0VfRrVj+2AkamuzoKaqjhw+sGJBS'
+    SESSION_TOKEN 'FwoGZXIvYXdzEBYaDHu7IZUlypFbyWw57yLMAQEIFEdpk2wGBoPRLSB+BWy8QptB57xf3GAke1MlEOrPYKPgWyOLtErARd4/F8X6wJ6m+LEzM8w9dVLqj7/o3vT+l31aDuMowzqbfvlmDm6OndBxZpKiTTugSFGq529eKySX5SLW+7BDcM8F6swsVZimCAU+YBj5YcJca1CVdHb/FZOdT6yrah/UaxXklrWI4U694C1F+v4JkBzSJPGLZypE4u8Oxb/wMXRegA8H33EQz+dEl5LBZ67jPjIvnWMfh/OUNBVEEUg2Uo0GQiihmsKcBjItX3mx3Q+sq1PmSHzoNvhot/pNXyq7YhwF1IB0u/4wUDEtAfQtMCr1nqNcdWSv'
     CSV
+    DELIMITER ','
+    IGNOREHEADER 1
     """,
     """
     COPY positions 
-    FROM 's3://chin-fifa/landing/positions/date_oprt=2022-12-05/*.csv'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
+    FROM 's3://jaochin-dataset-fifa/cleaned/positions/date_oprt=2022-12-07'
+    ACCESS_KEY_ID 'ASIAXZM22O2VTY22WUN2'
+    SECRET_ACCESS_KEY 'inf6RDpkjo1c0VfRrVj+2AkamuzoKaqjhw+sGJBS'
+    SESSION_TOKEN 'FwoGZXIvYXdzEBYaDHu7IZUlypFbyWw57yLMAQEIFEdpk2wGBoPRLSB+BWy8QptB57xf3GAke1MlEOrPYKPgWyOLtErARd4/F8X6wJ6m+LEzM8w9dVLqj7/o3vT+l31aDuMowzqbfvlmDm6OndBxZpKiTTugSFGq529eKySX5SLW+7BDcM8F6swsVZimCAU+YBj5YcJca1CVdHb/FZOdT6yrah/UaxXklrWI4U694C1F+v4JkBzSJPGLZypE4u8Oxb/wMXRegA8H33EQz+dEl5LBZ67jPjIvnWMfh/OUNBVEEUg2Uo0GQiihmsKcBjItX3mx3Q+sq1PmSHzoNvhot/pNXyq7YhwF1IB0u/4wUDEtAfQtMCr1nqNcdWSv'
     CSV
+    DELIMITER ','
+    IGNOREHEADER 1
     """,
     """
     COPY players 
-    FROM 's3://chin-fifa/landing/players/date_oprt=2022-12-05/*.csv'
-    CREDENTIALS 'aws_iam_role=arn:aws:iam::535584994987:role/LabRole'
+    FROM 's3://jaochin-dataset-fifa/cleaned/players/date_oprt=2022-12-07'
+    ACCESS_KEY_ID 'ASIAXZM22O2VTY22WUN2'
+    SECRET_ACCESS_KEY 'inf6RDpkjo1c0VfRrVj+2AkamuzoKaqjhw+sGJBS'
+    SESSION_TOKEN 'FwoGZXIvYXdzEBYaDHu7IZUlypFbyWw57yLMAQEIFEdpk2wGBoPRLSB+BWy8QptB57xf3GAke1MlEOrPYKPgWyOLtErARd4/F8X6wJ6m+LEzM8w9dVLqj7/o3vT+l31aDuMowzqbfvlmDm6OndBxZpKiTTugSFGq529eKySX5SLW+7BDcM8F6swsVZimCAU+YBj5YcJca1CVdHb/FZOdT6yrah/UaxXklrWI4U694C1F+v4JkBzSJPGLZypE4u8Oxb/wMXRegA8H33EQz+dEl5LBZ67jPjIvnWMfh/OUNBVEEUg2Uo0GQiihmsKcBjItX3mx3Q+sq1PmSHzoNvhot/pNXyq7YhwF1IB0u/4wUDEtAfQtMCr1nqNcdWSv'
     CSV
+    DELIMITER ','
+    IGNOREHEADER 1
     """,
 ]
 
 insert_table_queries = [
-    """
-    INSERT INTO events ( id, type, actor, repo, created_at )
-    SELECT DISTINCT id, type, actor_name, repo_name, created_at
-    FROM staging_events
-    WHERE id NOT IN (SELECT DISTINCT id FROM events)
-    """,
-    """
-    INSERT INTO actors ( id, name, url )
-    SELECT DISTINCT actor_id, actor_name, actor_url
-    FROM staging_events
-    WHERE actor_id NOT IN (SELECT DISTINCT id FROM actors)
-    """,
-    """
-    INSERT INTO repos ( id, name, url )
-    SELECT DISTINCT repo_id, repo_name, repo_url
-    FROM staging_events
-    WHERE id NOT IN (SELECT DISTINCT id FROM repos)
-    """,
     """
     INSERT INTO player_value_wage 
     SELECT p.player_id
@@ -127,37 +147,32 @@ insert_table_queries = [
         , p.player_overall 
         , p.player_value 
         , p.player_wage 
-        , pos.positions_name 
+        , pos.position_name 
         , c.club_name 
         , n.nationality_name 
         , l.league_name 
-        , current_date()
+        , current_date
     FROM players p
     INNER JOIN positions pos
-        ON pos.date_oprt = '2022-12-05' 
-       AND pos.position_id = p.position_id
+        ON pos.position_id = p.position_id
     INNER JOIN nationalities n
-        ON n.date_oprt = '2022-12-05' 
-       AND n.nationality_id = p.nationality_id
+        ON n.nationality_id = p.nationality_id
     INNER JOIN clubs c
-        ON c.date_oprt = '2022-12-05' 
-       AND c.club_id = p.club_id
+        ON c.club_id = p.club_id
     INNER JOIN leagues l
-        ON l.date_oprt = '2022-12-05' 
-       AND l.league_id = c.league_id
-    WHERE p.date_oprt = '2022-12-05'
+        ON l.league_id = c.league_id
     """,
 ]
 
 
-# def drop_tables(cur, conn):
-#     for query in drop_table_queries:
-#         cur.execute(query)
-#         conn.commit()
-
-
 def create_tables(cur, conn):
     for query in create_table_queries:
+        cur.execute(query)
+        conn.commit()
+
+
+def truncate_tables(cur, conn):
+    for query in truncate_table_queries:
         cur.execute(query)
         conn.commit()
 
@@ -184,13 +199,13 @@ def main():
     conn = psycopg2.connect(conn_str)
     cur = conn.cursor()
 
-    # drop_tables(cur, conn)
     create_tables(cur, conn)
+    truncate_tables(cur, conn)
     load_staging_tables(cur, conn)
     insert_tables(cur, conn)
 
     # query data
-    query = "select * from events"
+    query = "select * from player_value_wage"
     cur.execute(query)
     # print data
     records = cur.fetchall()
