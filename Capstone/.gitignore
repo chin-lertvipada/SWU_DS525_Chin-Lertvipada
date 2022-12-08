@@ -39,6 +39,7 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+logs/
 
 # Unit test / coverage reports
 htmlcov/
@@ -160,7 +161,8 @@ cython_debug/
 #Doc/
 
 # Backup
-#Backup/
+Backup/
+ENV_/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
