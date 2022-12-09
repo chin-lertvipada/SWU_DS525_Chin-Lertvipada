@@ -161,7 +161,7 @@ insert_table_queries = [
         , c.club_name 
         , n.nationality_name 
         , l.league_name 
-        , current_date
+        , {0}
     FROM players p
     INNER JOIN positions pos
         ON pos.position_id = p.position_id
@@ -203,7 +203,7 @@ def _load_staging_tables():
 
 def _insert_tables():
     for query in insert_table_queries:
-        cur.execute(query)
+        cur.execute(query.format(curr_date))
         conn.commit()
 
 
