@@ -12,6 +12,8 @@ from airflow.operators.python import PythonOperator
 # from airflow.operators.bash_operator import BashOperator
 # from airflow.hooks.postgres_hook import PostgresHook
 
+curr_date = datetime.today().strftime('%Y-%m-%d')
+
 
 create_table_queries = [
     """
@@ -89,53 +91,57 @@ truncate_table_queries = [
 
 # cat ~/.aws/credentials
 # https://stackoverflow.com/questions/15261743/how-to-copy-csv-data-file-to-amazon-redshift
+access_key_id = 'ASIAXZM22O2V247PAZIY'
+secret_access_key = 'd+621ZwHrmXMORw6sbymOtctiNAwE91HfQuNHjE+'
+session_token = 'FwoGZXIvYXdzEEYaDNWv+TU7X1Q7JNr1mSLMAU/UtmQ0CqjVPz7o643VVfmlu7C9aczBqw7ZRx4+L/X5RaqtZbL7cOXhnIMAnwdWvTxNwdtQ95XqokkIn2VKsQq17yPROB4BJ5M9K44V6pOJcorfCmGMMJLSmEJN5qBe++78U/7exIk091Nra+qSim8N/Qo/RAMbPLXeNyMcSmspudDohB0qf+poTPdWGWpy3MI6iWiVC05p4utQtkU3NnpJEdvjVoRmfuIsojJo7po4QILNiQ4EHKYYJl7t4dpBl6W9P0jDy5qSnyYcxiio5MycBjItxolwseeNKvHXeTkhcQQtP4j4pRAwQ8WhT9g8NuV1H7xBZopFuqhrdWF56QBO'
+
 copy_table_queries = [
     """
     COPY leagues 
-    FROM 's3://jaochin-dataset-fifa/cleaned/leagues/date_oprt=2022-12-07'
-    ACCESS_KEY_ID 'ASIAXZM22O2VR6ZR6QEV'
-    SECRET_ACCESS_KEY '52M4QXCoteoU6K2p9WiJyVeNeWS7Q6VBhPEK4nfY'
-    SESSION_TOKEN 'FwoGZXIvYXdzEC0aDNiNpfGSfyIpkFPsjSLMAYWX12ZnePa0bpOZNtcPttMyqcOB+qbYCDy/fZM/n3WkvnuDWHyqDb4Z8sqfA0fevP7tVdWHA++Wt31R/pTHPPfJZn2E4LO9/3C418J80jPzpae8F2TlrlW66sycCgewW0SphMVbxhxFcV2pTaBBLoA66oIMOZWewkj3IbPVDetdcowg0yfRK3AjdxADl6aUxqAgfzktJvYtW58Ti3EkbkaiVjmO57YvsRubnuXVmDWcWRc0FAyHHiCdUev6SqsEd+0cYq8ndgbNuELSJijKm8ecBjIt3RcTQ3dn8Qlls3tjZP3CT19+gkHEoXTClJQSBkcm8WQhp7cozQBO6ng7XSsW'
+    FROM 's3://jaochin-dataset-fifa/cleaned/leagues/date_oprt={0}'
+    ACCESS_KEY_ID '{1}'
+    SECRET_ACCESS_KEY '{2}'
+    SESSION_TOKEN '{3}'
     CSV
     DELIMITER ','
     IGNOREHEADER 1
     """,
     """
     COPY clubs 
-    FROM 's3://jaochin-dataset-fifa/cleaned/clubs/date_oprt=2022-12-07'
-    ACCESS_KEY_ID 'ASIAXZM22O2VR6ZR6QEV'
-    SECRET_ACCESS_KEY '52M4QXCoteoU6K2p9WiJyVeNeWS7Q6VBhPEK4nfY'
-    SESSION_TOKEN 'FwoGZXIvYXdzEC0aDNiNpfGSfyIpkFPsjSLMAYWX12ZnePa0bpOZNtcPttMyqcOB+qbYCDy/fZM/n3WkvnuDWHyqDb4Z8sqfA0fevP7tVdWHA++Wt31R/pTHPPfJZn2E4LO9/3C418J80jPzpae8F2TlrlW66sycCgewW0SphMVbxhxFcV2pTaBBLoA66oIMOZWewkj3IbPVDetdcowg0yfRK3AjdxADl6aUxqAgfzktJvYtW58Ti3EkbkaiVjmO57YvsRubnuXVmDWcWRc0FAyHHiCdUev6SqsEd+0cYq8ndgbNuELSJijKm8ecBjIt3RcTQ3dn8Qlls3tjZP3CT19+gkHEoXTClJQSBkcm8WQhp7cozQBO6ng7XSsW'
+    FROM 's3://jaochin-dataset-fifa/cleaned/clubs/date_oprt={0}'
+    ACCESS_KEY_ID '{1}'
+    SECRET_ACCESS_KEY '{2}'
+    SESSION_TOKEN '{3}'
     CSV
     DELIMITER ','
     IGNOREHEADER 1
     """,
     """
     COPY nationalities 
-    FROM 's3://jaochin-dataset-fifa/cleaned/nationalities/date_oprt=2022-12-07'
-    ACCESS_KEY_ID 'ASIAXZM22O2VR6ZR6QEV'
-    SECRET_ACCESS_KEY '52M4QXCoteoU6K2p9WiJyVeNeWS7Q6VBhPEK4nfY'
-    SESSION_TOKEN 'FwoGZXIvYXdzEC0aDNiNpfGSfyIpkFPsjSLMAYWX12ZnePa0bpOZNtcPttMyqcOB+qbYCDy/fZM/n3WkvnuDWHyqDb4Z8sqfA0fevP7tVdWHA++Wt31R/pTHPPfJZn2E4LO9/3C418J80jPzpae8F2TlrlW66sycCgewW0SphMVbxhxFcV2pTaBBLoA66oIMOZWewkj3IbPVDetdcowg0yfRK3AjdxADl6aUxqAgfzktJvYtW58Ti3EkbkaiVjmO57YvsRubnuXVmDWcWRc0FAyHHiCdUev6SqsEd+0cYq8ndgbNuELSJijKm8ecBjIt3RcTQ3dn8Qlls3tjZP3CT19+gkHEoXTClJQSBkcm8WQhp7cozQBO6ng7XSsW'
+    FROM 's3://jaochin-dataset-fifa/cleaned/nationalities/date_oprt={0}'
+    ACCESS_KEY_ID '{1}'
+    SECRET_ACCESS_KEY '{2}'
+    SESSION_TOKEN '{3}'
     CSV
     DELIMITER ','
     IGNOREHEADER 1
     """,
     """
     COPY positions 
-    FROM 's3://jaochin-dataset-fifa/cleaned/positions/date_oprt=2022-12-07'
-    ACCESS_KEY_ID 'ASIAXZM22O2VR6ZR6QEV'
-    SECRET_ACCESS_KEY '52M4QXCoteoU6K2p9WiJyVeNeWS7Q6VBhPEK4nfY'
-    SESSION_TOKEN 'FwoGZXIvYXdzEC0aDNiNpfGSfyIpkFPsjSLMAYWX12ZnePa0bpOZNtcPttMyqcOB+qbYCDy/fZM/n3WkvnuDWHyqDb4Z8sqfA0fevP7tVdWHA++Wt31R/pTHPPfJZn2E4LO9/3C418J80jPzpae8F2TlrlW66sycCgewW0SphMVbxhxFcV2pTaBBLoA66oIMOZWewkj3IbPVDetdcowg0yfRK3AjdxADl6aUxqAgfzktJvYtW58Ti3EkbkaiVjmO57YvsRubnuXVmDWcWRc0FAyHHiCdUev6SqsEd+0cYq8ndgbNuELSJijKm8ecBjIt3RcTQ3dn8Qlls3tjZP3CT19+gkHEoXTClJQSBkcm8WQhp7cozQBO6ng7XSsW'
+    FROM 's3://jaochin-dataset-fifa/cleaned/positions/date_oprt={0}'
+    ACCESS_KEY_ID '{1}'
+    SECRET_ACCESS_KEY '{2}'
+    SESSION_TOKEN '{3}'
     CSV
     DELIMITER ','
     IGNOREHEADER 1
     """,
     """
     COPY players 
-    FROM 's3://jaochin-dataset-fifa/cleaned/players/date_oprt=2022-12-07'
-    ACCESS_KEY_ID 'ASIAXZM22O2VR6ZR6QEV'
-    SECRET_ACCESS_KEY '52M4QXCoteoU6K2p9WiJyVeNeWS7Q6VBhPEK4nfY'
-    SESSION_TOKEN 'FwoGZXIvYXdzEC0aDNiNpfGSfyIpkFPsjSLMAYWX12ZnePa0bpOZNtcPttMyqcOB+qbYCDy/fZM/n3WkvnuDWHyqDb4Z8sqfA0fevP7tVdWHA++Wt31R/pTHPPfJZn2E4LO9/3C418J80jPzpae8F2TlrlW66sycCgewW0SphMVbxhxFcV2pTaBBLoA66oIMOZWewkj3IbPVDetdcowg0yfRK3AjdxADl6aUxqAgfzktJvYtW58Ti3EkbkaiVjmO57YvsRubnuXVmDWcWRc0FAyHHiCdUev6SqsEd+0cYq8ndgbNuELSJijKm8ecBjIt3RcTQ3dn8Qlls3tjZP3CT19+gkHEoXTClJQSBkcm8WQhp7cozQBO6ng7XSsW'
+    FROM 's3://jaochin-dataset-fifa/cleaned/players/date_oprt={0}'
+    ACCESS_KEY_ID '{1}'
+    SECRET_ACCESS_KEY '{2}'
+    SESSION_TOKEN '{3}'
     CSV
     DELIMITER ','
     IGNOREHEADER 1
@@ -191,7 +197,7 @@ def _truncate_tables():
 
 def _load_staging_tables():
     for query in copy_table_queries:
-        cur.execute(query)
+        cur.execute(query.format(curr_date, access_key_id, secret_access_key, session_token))
         conn.commit()
 
 
