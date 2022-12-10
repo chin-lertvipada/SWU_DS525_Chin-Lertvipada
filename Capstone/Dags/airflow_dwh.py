@@ -91,9 +91,9 @@ truncate_table_queries = [
 
 # cat ~/.aws/credentials
 # https://stackoverflow.com/questions/15261743/how-to-copy-csv-data-file-to-amazon-redshift
-access_key_id = 'ASIAXZM22O2V247PAZIY'
-secret_access_key = 'd+621ZwHrmXMORw6sbymOtctiNAwE91HfQuNHjE+'
-session_token = 'FwoGZXIvYXdzEEYaDNWv+TU7X1Q7JNr1mSLMAU/UtmQ0CqjVPz7o643VVfmlu7C9aczBqw7ZRx4+L/X5RaqtZbL7cOXhnIMAnwdWvTxNwdtQ95XqokkIn2VKsQq17yPROB4BJ5M9K44V6pOJcorfCmGMMJLSmEJN5qBe++78U/7exIk091Nra+qSim8N/Qo/RAMbPLXeNyMcSmspudDohB0qf+poTPdWGWpy3MI6iWiVC05p4utQtkU3NnpJEdvjVoRmfuIsojJo7po4QILNiQ4EHKYYJl7t4dpBl6W9P0jDy5qSnyYcxiio5MycBjItxolwseeNKvHXeTkhcQQtP4j4pRAwQ8WhT9g8NuV1H7xBZopFuqhrdWF56QBO'
+access_key_id = 'ASIAXZM22O2VXQO6X4VS'
+secret_access_key = 'jU51LdYFfRDMdjuOBYIaTeipqjOSM2CiNmTUhirI'
+session_token = 'FwoGZXIvYXdzEFcaDOxH2Om9hPZjg5WpayLMAYntZue9kQAF+86jNSDBujj662NNjg6LarYBhea24c4cPiLMYXcGpnrFn7+owSOwRwcvCiGRRUrT/P4Dn7cBb1JNfsLs2sYdPnR1WF+zTna4J5ddTTkKDcyYCcxILHballDZKHLCIB9UCDAMh8RIzLBsRKKVn4xrzXgUzUJvMh9wYL3dCHYegI4pRpkDwW17P0j/mSqdsAoabq1rC5U9Pei8LuOe3Ll6ShqZhaTeVOTbB+CvY03zhYSD32OLLVQSOi3ooolSdqJwEg1nyyiNp9CcBjItMPJRkZpvq3iqYLBfsxYthG9eifO2ceNQjR7/R4c4DPNac/+n3vUI7Pq4oryU'
 
 copy_table_queries = [
     """
@@ -161,7 +161,7 @@ insert_table_queries = [
         , c.club_name 
         , n.nationality_name 
         , l.league_name 
-        , {0}
+        , current_date
     FROM players p
     INNER JOIN positions pos
         ON pos.position_id = p.position_id
@@ -203,14 +203,14 @@ def _load_staging_tables():
 
 def _insert_tables():
     for query in insert_table_queries:
-        cur.execute(query.format(curr_date))
+        cur.execute(query)
         conn.commit()
 
 
 with DAG(
     'Capstone',
-    start_date = timezone.datetime(2022, 11, 1),
-    schedule = '@hourly',
+    start_date = timezone.datetime(2022, 12, 1),
+    schedule = '@daily',
     tags = ['capstone'],
     catchup = False,
 ) as dag:
