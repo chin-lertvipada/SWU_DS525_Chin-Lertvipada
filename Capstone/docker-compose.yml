@@ -41,6 +41,7 @@
 version: '3'
 x-airflow-common:
   &airflow-common
+  build: .
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
@@ -61,6 +62,9 @@ x-airflow-common:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
+    - ./papermill/notebooks/:/opt/airflow/notebooks/
+    - ./papermill/output/:/opt/airflow/output/
+    # - ./dags:/usr/local/airflow/dags
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on

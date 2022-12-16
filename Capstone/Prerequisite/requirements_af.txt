@@ -1,0 +1,16 @@
+# https://medium.com/@jaroensakyodkantha_654/%E0%B9%82%E0%B8%9B%E0%B8%A3%E0%B9%80%E0%B8%88%E0%B8%84-de-%E0%B8%87%E0%B9%88%E0%B8%B2%E0%B8%A2%E0%B9%86-%E0%B8%9C%E0%B9%88%E0%B8%B2%E0%B8%99-docker-apache-airflow-%E0%B9%81%E0%B8%A5%E0%B8%B0-kubernetes-81296aff01c4
+# docker build -t apache/airflow:2.4.1 .
+
+papermill==2.1.3
+apache-airflow-providers-papermill
+# ipykernel
+pyspark
+
+# RUN pip install --upgrade pip ipython ipykernel
+# RUN ipython kernel install --name "python3" --user
+
+lxml
+python-decouple
+apache-airflow-providers-apache-spark
+requests
+pandas

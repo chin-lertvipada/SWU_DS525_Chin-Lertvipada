@@ -6,6 +6,8 @@ import json
 from datetime import datetime
 import psycopg2
 
+import papermill as pm
+
 from airflow import DAG
 from airflow.utils import timezone
 from airflow.operators.python import PythonOperator
@@ -13,6 +15,13 @@ from airflow.operators.python import PythonOperator
 # from airflow.hooks.postgres_hook import PostgresHook
 
 curr_date = datetime.today().strftime('%Y-%m-%d')
+
+
+def _datalake_s3():
+    pm.execute_notebook(
+    '/opt/airflow/dags/datalake_etl_s3.ipynb',
+    '/opt/airflow/dags/datalake_etl_s3_output.ipynb',
+)
 
 
 create_table_queries = [
@@ -215,6 +224,11 @@ with DAG(
     catchup = False,
 ) as dag:
 
+    datalake_s3 = PythonOperator(
+        task_id = 'datalake_s3',
+        python_callable = _datalake_s3,
+    )
+
     create_tables = PythonOperator(
         task_id = 'create_tables',
         python_callable = _create_tables,
@@ -235,4 +249,4 @@ with DAG(
         python_callable = _insert_tables,
     )
 
-    create_tables >> truncate_tables >> load_staging_tables >> insert_tables
+    datalake_s3 >> create_tables >> truncate_tables >> load_staging_tables >> insert_tables
