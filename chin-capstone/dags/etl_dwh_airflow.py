@@ -73,19 +73,19 @@ create_table_queries = [
 
 truncate_table_queries = [
     """
-    truncate table leagues
+    TRUNCATE TABLE leagues
     """,
     """
-    truncate table clubs
+    TRUNCATE TABLE clubs
     """,
     """
-    truncate table nationalities
+    TRUNCATE TABLE nationalities
     """,
     """
-    truncate table positions
+    TRUNCATE TABLE positions
     """,
     """
-    truncate table players
+    TRUNCATE TABLE players
     """,
 ]
 
@@ -148,7 +148,13 @@ copy_table_queries = [
     """,
 ]
 
-insert_table_queries = [
+clear_dwh_queries = [
+    """
+    DELETE FROM player_value_wage WHERE date_oprt = current_date
+    """,
+]
+
+insert_dwh_queries = [
     """
     INSERT INTO player_value_wage 
     SELECT p.player_id
@@ -188,31 +194,33 @@ def _create_tables():
         cur.execute(query)
         conn.commit()
 
-
-def _truncate_tables():
+def _truncate_datalake_tables():
     for query in truncate_table_queries:
         cur.execute(query)
         conn.commit()
-
 
 def _load_staging_tables():
     for query in copy_table_queries:
         cur.execute(query.format(curr_date, access_key_id, secret_access_key, session_token))
         conn.commit()
 
+def _clear_dwh_tables():
+    for query in clear_dwh_queries:
+        cur.execute(query)
+        conn.commit()
 
-def _insert_tables():
-    for query in insert_table_queries:
+def _insert_dwh_tables():
+    for query in insert_dwh_queries:
         cur.execute(query)
         conn.commit()
 
 
 with DAG(
     'Capstone',
-    start_date = timezone.datetime(2022, 12, 1),
-    schedule = '@daily',
+    start_date = timezone.datetime(2022, 12, 1), # Start of the flow
+    schedule = '@monthly', # Run once a month at midnight of the first day of the month
     tags = ['capstone'],
-    catchup = False,
+    catchup = False, # No need to catchup the missing run since start_date
 ) as dag:
 
 
@@ -221,9 +229,9 @@ with DAG(
         python_callable = _create_tables,
     )
 
-    truncate_tables = PythonOperator(
-        task_id = 'truncate_tables',
-        python_callable = _truncate_tables,
+    truncate_datalake_tables = PythonOperator(
+        task_id = 'truncate_datalake_tables',
+        python_callable = _truncate_datalake_tables,
     )
 
     load_staging_tables = PythonOperator(
@@ -231,9 +239,14 @@ with DAG(
         python_callable = _load_staging_tables,
     )
 
-    insert_tables = PythonOperator(
-        task_id = 'insert_tables',
-        python_callable = _insert_tables,
+    clear_dwh_tables = PythonOperator(
+        task_id = 'clear_dwh_tables',
+        python_callable = _clear_dwh_tables,
     )
 
-    create_tables >> truncate_tables >> load_staging_tables >> insert_tables
+    insert_dwh_tables = PythonOperator(
+        task_id = 'insert_dwh_tables',
+        python_callable = _insert_dwh_tables,
+    )
+
+    create_tables >> truncate_datalake_tables >> load_staging_tables >> clear_dwh_tables >> insert_dwh_tables
