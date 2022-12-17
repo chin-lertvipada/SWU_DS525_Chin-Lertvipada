@@ -91,9 +91,9 @@ truncate_table_queries = [
 
 # cat ~/.aws/credentials
 # https://stackoverflow.com/questions/15261743/how-to-copy-csv-data-file-to-amazon-redshift
-access_key_id = 'ASIAXZM22O2VTZXH3EUP'
-secret_access_key = '9NwRlaistTkv5qfKIdOLVN7HN6gaKB7RLux2PLnR'
-session_token = 'FwoGZXIvYXdzEO3//////////wEaDNG/m1Hu7o2WAQKniiLMAf0cWfA7AvIaERqfk3MavZ8nPJAsglvjaddRra65NP/ZpVp0225ElmUQ6MgOXxIE/wW1vH18Rf+0Wa1cp2MKAnL8GVkEH/5/t0UC8pj0GX0lRXh00WbE7mB6PbwUWhEtNbRrDtlvqys5SJfEO0T0yLoJJug3/aEMJWT462P7dB0VlYczCkFyr2xrbQStfQGLVWypcKDrOX0Q65N7S86/+DMZyM3emhUGPP9sXLEkl8eUE4IYc+3d+6KOdk8J5l3w281er4JXtpetm+6t4ijmrPGcBjItdmeSaVJ0x0fasqLnmRzMrtCNBqzQMJJ6e21kq74/cUvNQC+ejl0Mwaq/igEP'
+aws_access_key_id = 'ASIAXZM22O2VSABQJYPJ'
+aws_secret_access_key = '2sfHxUDFIHsh7h2jpO21t/VIxYWdVmNnC8JNATU8'
+aws_session_token = 'FwoGZXIvYXdzEAkaDFsC3AmuwmxKUWMqGCLMAY/yun8jgYXRyyprgRM5gIUjZZtMIHAKporWGaMYcjEYEkp/d6ZoFGm8R2Jv6MVtyDF1BlBsQH3SCXr3uBTfHgAsbOK8OzNTARb/aQ/6Wplwwuc6UA3KuPUse8rlAE0DQJc5oBC/dU7ALweqTLkkZDK/+AOUKf9X18D7a6Dds2eY9MoLj7UGCH6dPF04w5Zdd5/VrhZXalg73lDMzCwNF3GFDfb+ttU1O+b7AGHSe0+xUIDearb1vBYO8o5c2EUTPvmKlpFLbMDyeFzM9iiozvecBjItO9g1qKnVwMSdACIepHpKlQic1+55xewFBjkEUbjvNSDyS7BwUZslWoHWogTA'
 
 copy_table_queries = [
     """
@@ -201,7 +201,7 @@ def _truncate_datalake_tables():
 
 def _load_staging_tables():
     for query in copy_table_queries:
-        cur.execute(query.format(curr_date, access_key_id, secret_access_key, session_token))
+        cur.execute(query.format(curr_date, aws_access_key_id, aws_secret_access_key, aws_session_token))
         conn.commit()
 
 def _clear_dwh_tables():

@@ -1,7 +1,13 @@
-# Creating and Scheduling Data Pipelines
+# Capstone Project - Chin Lertvipada 64199130039
 
-## Data model
-![DataModel](Doc/data-model.png)
+## Data model (Datalake)
+![DataModelDL](document/chin-capstone-datalake.png)
+<br>
+
+## Data model (Datawarehouse)
+![DataModelDWH](document/chin-capstone-dwh.png)
+<br>
+__________
 <br>
 
 ## Documentation
@@ -13,51 +19,173 @@ __________
 ## Project implementation instruction
 <br>
 
-### 1. change directory to project 04-building-a-data-lake:
+### 1. Change directory to project chin-capstone:
 ```sh
-$ cd 05-creating-and-scheduling-data-pipelines
+$ cd chin-capstone
 ```
 <br>
 
-### 2. prepare environment workspace by Docker:
-- ถ้าใช้งานระบบที่เป็น Linux ให้เรารันคำสั่งด้านล่างนี้ก่อน
+### 2. Prepare Cloud access (AWS):
+- Retrieve credential thru AWS terminal
+```sh
+$ cat ~/.aws/credentials
+```
+![awsAccessKey](document/aws_access_key.png)
+
+- Copy the 3 following values to update the source codes<br>
+
+*Values to copy:*
+> - aws_access_key_id
+> - aws_secret_access_key
+> - aws_session_token
+
+*Source code to update (1):*
+> - /code/etl_datalake_s3.ipynb
+![awsAccessKeyDL](document/aws_access_key_datalake.png)
+
+*Source code to update (2):*
+> - /dags/etl_dwh_airflow.py
+![awsAccessKeyDWH](document/aws_access_key_dwh.png)
+
+<br>
+
+### 3. Prepare Datalake storage (AWS S3):
+- Create below S3 bucket with 'All public access'
+> **jaochin-dataset-fifa**
+![s3Bucket](document/s3_bucket.png)
+
+- Create below repositories in the bucket
+> **/landing/** (store raw data)<br>
+> **/cleaned/** (store datalake or cleaned data)
+![s3Folder](document/s3_folder.png)
+
+- Place the raw data in **'landing/'**
+> ![rawData](document/rawData.png)
+
+<br>
+
+### 4. Prepare Datawarehouse storage (AWS RedShift):
+- Create cluster with following information
+
+![redshift1](document/redshift1.png)
+![redshift2](document/redshift2.png)
+![redshift3](document/redshift3.png)
+
+- Copy **Endpoint** to update Redshift credential
+
+![redshiftEndpoint](document/redshiftEndpoint.png)
+
+
+- Update the source code with Redshift credential
+> - dags/etl_dwh_airflow.py
+![redshiftCredential](document/redshiftCredential.png)
+
+<br>
+
+### 5. Create virtual environment named 'ENV' (only 1st time):
+```sh
+$ python -m venv ENV
+```
+<br>
+
+### 6. Activate the visual environment:
+```sh
+$ source ENV/bin/activate
+```
+<br>
+
+### 7. Install needful libraries from configuration file (only 1st time):
+```sh
+$ pip install -r prerequisite/requirements.txt
+```
+<br>
+
+### 8. Prepare environment workspace thru Docker:
+- If Linux system, run the following commands (for Airflow usage)
 
 ```sh
 mkdir -p ./dags ./logs ./plugins
+```
+```sh
 echo -e "AIRFLOW_UID=$(id -u)" > .env
 ```
 
-- จากนั้นให้รัน
+- After that, run below command
 
 ```sh
 docker-compose up
 ```
 <br>
 
-### 3. Prepare data:
-- คัดลอกโฟลเดอร์ `data` ที่เตรียมไว้ด้านนอกสุด เข้ามาใส่ในโฟลเดอร์ `dags` เพื่อที่ Airflow จะได้เห็นไฟล์ข้อมูลเหล่านี้ 
+### 9. Execute the Datalake process thru Web service:
+- Access PySpark Notebook UI by port 8888 (localhost:8888)
+
+![pyspark](document/pyspark.png)
+
+- Run PySpark Notebook '**/code/etl_datalake_s3.ipynb**'
+
+![runSpark](document/runSpark.png)
+
+- The cleaned data will be stored in S3 for each entity
+> jaochin-dataset-fifa/cleaned/clubs/<br>
+> jaochin-dataset-fifa/cleaned/leagues/<br>
+> jaochin-dataset-fifa/cleaned/nationalities/<br>
+> jaochin-dataset-fifa/cleaned/players/<br>
+> jaochin-dataset-fifa/cleaned/positions/<br>
+
+![cleanedData](document/cleanedData.png)
+
+
+- Each entity is partitioned by **date_oprt** (execution date)
+
+![cleanedDataPart](document/cleanedDataPart.png)
+<br><br>
+
+### 10. Execute the Datawarehouse process thru Airflow:
+- Access Airflow UI by port 8080 (localhost:8080) with below credential
+> Username: airflow<br>
+> Password: airflow<br>
+
+- The Datawarehouse script will be run follow the schedule configuration
+> Schedule: Monthly (1st of each month)<br>
+> Start date: 1st December 2022
+
+![airflowDWH](document/airflowDWH.png)
+
+- The Datawarehouse data will be loaded into Redshift (check by Query editor)
+```sh
+select * from player_value_wage;
+```
+![redshiftOutput1](document/redshiftOutput1.png)
+![redshiftOutput2](document/redshiftOutput2.png)
+
 <br>
 
-**หมายเหตุ:** จริง ๆ แล้วสามารถเอาโฟลเดอร์ `data` ไว้ที่ไหนก็ได้ที่ Airflow ที่เรารันเข้าถึงได้ แต่เพื่อความสะดวกสำหรับโปรเจคนี้ จึงนำเอาโฟลเดอร์ `data` ไว้ในโฟลเดอร์ `dags`
+### 11. Dashboard creation thru Tableau:
+- Connect Tableau Desktop to Redshift by following information
 
+![redshiftCredential](document/redshiftCredential.png)
+![tbConnect](document/tbConnect.png)
+
+- Load the data from Redshift to Tableau
+
+![tbLoadData](document/tbLoadData.png)
+
+- Create Dashboard to visualize the insight!
+
+https://public.tableau.com/app/profile/chin.lertvipada/viz/Capstone_csv/FootballMarketValue
+![dashboard](document/dashboard.png)
+<br>
+__________
 <br>
 
-### 4. Access Airflow thru web service:
-- เข้าไปที่หน้า Airflow UI ได้ที่ port 8080 (localhost:8080)
-<br><br>
+## Shutdown steps
+##### 1. Stop services by shutdown Docker:
+```sh
+$ docker-compose down
+```
 
-### 5. Access Postgres thru web service:
-- เข้าไปที่หน้า Postgres UI ผ่าน service Adminer ได้ที่ port 8088 (localhost:8088)
-<br><br>
-
-### 6. Setup Postgres parameter for Airflow:
-![AirflowConnectionSetup](Doc/AirflowConnectionSetup.png)
-![AirflowConnectPostgres](Doc/AirflowConnectPostgres.png)
-<br><br>
-
-### 7. Data validation:
-- ตรวจสอบการทำงานของ Airflow schedule ที่ตั้งค่าไว้
-![Airflow](Doc/Airflow.png)
-<br><br>
-- ตรวจสอบข้อมูลที่มีการ load เข้าสู่ tables ตาม schedule ที่กำหนดไว้
-![Postgres](Doc/Postgres.png)
+##### 2. Deactivate the virtual environment:
+```sh
+$ deactivate
+```
