@@ -62,7 +62,8 @@ $ cat ~/.aws/credentials
 ![s3Folder](document/s3_folder.png)
 
 - Place the raw data in **"landing/"**
-> ![rawData](document/rawData.png)
+
+![rawData](document/rawData.png)
 
 <br>
 
