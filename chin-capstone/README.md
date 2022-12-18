@@ -10,8 +10,8 @@
 __________
 <br>
 
-## Documentation
-[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/bff9b3c9375882b2133aa06c9896775038fdf517/05-creating-and-scheduling-data-pipelines/Doc/Lab5%20-%20Airflow%20-%20Summary.pdf)
+## Project Information Documentation
+[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/93cd5cb2c847f256850b1b7557b9b236a9f098f0/chin-capstone/document/Capstone%20-%20Summary.pdf)
 <br>
 __________
 <br>
