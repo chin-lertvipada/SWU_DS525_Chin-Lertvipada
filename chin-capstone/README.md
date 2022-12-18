@@ -11,7 +11,7 @@ __________
 <br>
 
 ## Project Information Documentation
-[Information Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/93cd5cb2c847f256850b1b7557b9b236a9f098f0/chin-capstone/document/Capstone%20-%20Summary.pdf)
+[Information Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/b19f682d79c748e7f674b3a47c82b4dc80f9f9c5/chin-capstone/document/Capstone%20-%20Summary.pdf)
 <br>
 __________
 <br>
