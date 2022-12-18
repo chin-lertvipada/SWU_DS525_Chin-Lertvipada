@@ -11,7 +11,15 @@ __________
 <br>
 
 ## Project Information Documentation
-[Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/93cd5cb2c847f256850b1b7557b9b236a9f098f0/chin-capstone/document/Capstone%20-%20Summary.pdf)
+[Information Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/93cd5cb2c847f256850b1b7557b9b236a9f098f0/chin-capstone/document/Capstone%20-%20Summary.pdf)
+<br>
+__________
+<br>
+
+## Project Overview Presentation
+[Presentation Documentation](https://github.com/chin-lertvipada/swu-ds525/blob/93cd5cb2c847f256850b1b7557b9b236a9f098f0/chin-capstone/document/Capstone%20-%20Summary.pdf)
+
+[![Presentation VDO](document/YoutubeCover.png)](https://youtu.be/7uj3f0Q5t0I)
 <br>
 __________
 <br>
